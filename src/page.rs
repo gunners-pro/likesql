@@ -9,6 +9,10 @@ impl Page {
         Self { data }
     }
 
+    pub fn as_bytes(&self) -> &[u8] {
+        &self.data
+    }
+
     pub fn as_mut_bytes(&mut self) -> &mut [u8] {
         &mut self.data
     }

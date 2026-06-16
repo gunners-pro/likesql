@@ -5,7 +5,7 @@ use crate::{
 };
 use std::{
     fs::{File, OpenOptions},
-    io::{self, Read, Seek, Write},
+    io::{self, Read, Seek, SeekFrom, Write},
 };
 
 pub struct Pager {
@@ -42,9 +42,21 @@ impl Pager {
     pub fn read_page(&mut self, page_id: u64) -> Result<Page, DbError> {
         let offset = page_id * PAGE_SIZE as u64;
 
-        self.file.seek(io::SeekFrom::Start(offset))?;
+        self.file.seek(SeekFrom::Start(offset))?;
         let mut page = Page::new([0u8; PAGE_SIZE]);
         self.file.read_exact(page.as_mut_bytes())?;
         Ok(page)
+    }
+
+    pub fn write_page(&mut self, page_id: u64, page: &Page) -> Result<(), DbError> {
+        let offset = page_id * PAGE_SIZE as u64;
+        self.file.seek(SeekFrom::Start(offset))?;
+        self.file.write_all(page.as_bytes())?;
+        Ok(())
+    }
+
+    pub fn page_count(&self) -> Result<u64, DbError> {
+        let file_size = self.file.metadata()?.len();
+        Ok(file_size / PAGE_SIZE as u64)
     }
 }
