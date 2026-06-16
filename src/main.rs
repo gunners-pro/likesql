@@ -1,12 +1,15 @@
-use crate::database::Database;
-use std::io;
+use crate::{database::Database, error::DbError};
 
+mod constants;
 mod database;
 mod error;
+mod pager;
 
-fn main() -> io::Result<()> {
+fn main() -> Result<(), DbError> {
     println!("Server started...");
-    let db = Database::open("database.db").unwrap();
-    println!("Database opened successfully!");
+    let mut db = Database::open("database.db")?;
+    let page0 = db.read_page(0)?;
+
+    println!("Database opened successfully! {page0:?}");
     Ok(())
 }
