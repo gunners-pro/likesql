@@ -1,8 +1,9 @@
-use crate::{database::Database, error::DbError};
+use crate::{constants::HEADER, database::Database, error::DbError};
 
 mod constants;
 mod database;
 mod error;
+mod page;
 mod pager;
 
 fn main() -> Result<(), DbError> {
@@ -10,6 +11,8 @@ fn main() -> Result<(), DbError> {
     let mut db = Database::open("database.db")?;
     let page0 = db.read_page(0)?;
 
-    println!("Database opened successfully! {page0:?}");
+    assert_eq!(page0.header(), HEADER);
+
+    println!("Database opened successfully!");
     Ok(())
 }

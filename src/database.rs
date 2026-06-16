@@ -1,4 +1,4 @@
-use crate::{constants::PAGE_SIZE, error::DbError, pager::Pager};
+use crate::{error::DbError, page::Page, pager::Pager};
 
 pub struct Database {
     pager: Pager,
@@ -11,7 +11,7 @@ impl Database {
         Ok(Self { pager })
     }
 
-    pub fn read_page(&mut self, page_id: u64) -> Result<[u8; PAGE_SIZE], DbError> {
+    pub fn read_page(&mut self, page_id: u64) -> Result<Page, DbError> {
         self.pager.read_page(page_id)
     }
 }

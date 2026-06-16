@@ -1,6 +1,7 @@
 use crate::{
     constants::{HEADER, PAGE_SIZE},
     error::DbError,
+    page::Page,
 };
 use std::{
     fs::{File, OpenOptions},
@@ -38,12 +39,12 @@ impl Pager {
         Ok(Self { file })
     }
 
-    pub fn read_page(&mut self, page_id: u64) -> Result<[u8; PAGE_SIZE], DbError> {
+    pub fn read_page(&mut self, page_id: u64) -> Result<Page, DbError> {
         let offset = page_id * PAGE_SIZE as u64;
 
         self.file.seek(io::SeekFrom::Start(offset))?;
-        let mut page = [0u8; PAGE_SIZE];
-        self.file.read_exact(&mut page)?;
+        let mut page = Page::new([0u8; PAGE_SIZE]);
+        self.file.read_exact(page.as_mut_bytes())?;
         Ok(page)
     }
 }
