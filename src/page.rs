@@ -22,4 +22,8 @@ impl Page {
             .try_into()
             .expect("Invalid header length.")
     }
+
+    pub fn empty() -> Self {
+        Self::new([0u8; PAGE_SIZE])
+    }
 }

@@ -59,4 +59,12 @@ impl Pager {
         let file_size = self.file.metadata()?.len();
         Ok(file_size / PAGE_SIZE as u64)
     }
+
+    pub fn allocate_page(&mut self) -> Result<u64, DbError> {
+        let page_id = self.page_count()?;
+        let page = Page::empty();
+        self.file.seek(SeekFrom::End(0))?;
+        self.write_page(page_id, &page)?;
+        Ok(page_id)
+    }
 }
