@@ -49,10 +49,14 @@ impl Pager {
     }
 
     pub fn write_page(&mut self, page_id: u64, page: &Page) -> Result<(), DbError> {
-        let offset = page_id * PAGE_SIZE as u64;
-        self.file.seek(SeekFrom::Start(offset))?;
-        self.file.write_all(page.as_bytes())?;
-        Ok(())
+        if page_id >= self.page_count()? {
+            Err(DbError::InvalidPageId)
+        } else {
+            let offset = page_id * PAGE_SIZE as u64;
+            self.file.seek(SeekFrom::Start(offset))?;
+            self.file.write_all(page.as_bytes())?;
+            Ok(())
+        }
     }
 
     pub fn page_count(&self) -> Result<u64, DbError> {

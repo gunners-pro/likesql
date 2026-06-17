@@ -4,6 +4,7 @@ use std::io;
 pub enum DbError {
     Io(io::Error),
     InvalidHeader,
+    InvalidPageId,
 }
 
 impl From<io::Error> for DbError {
