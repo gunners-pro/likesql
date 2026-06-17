@@ -1,5 +1,6 @@
 use crate::constants::{HEADER, PAGE_SIZE};
 
+#[derive(Debug)]
 pub struct Page {
     data: [u8; PAGE_SIZE],
 }

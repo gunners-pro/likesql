@@ -18,4 +18,12 @@ impl Database {
     pub fn write_page(&mut self, page_id: u64, page: &Page) -> Result<(), DbError> {
         self.pager.write_page(page_id, page)
     }
+
+    pub fn page_count(&self) -> Result<u64, DbError> {
+        self.pager.page_count()
+    }
+
+    pub fn allocate_page(&mut self) -> Result<u64, DbError> {
+        self.pager.allocate_page()
+    }
 }
